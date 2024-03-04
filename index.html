@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Website</title>
+
+
+<style>
+ body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+  background-image: url('/quiz2.webp'); /* Replace 'background.jpg' with the path to your background image */
+  background-size: cover;
+  background-position: center;
+}
+
+#quiz-container {
+  background-color: #64b0f3;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+#question {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+#options button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #000000;
+}
+
+#timer {
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+</style>
+</head>
+<body>
+<div id="quiz-container">
+  <h1>Quiz Website</h1>
+  <div id="question"></div>
+  <div id="options"></div>
+  <div id="timer"></div>
+</div>
+
+<script>
+const quizData = [
+
+  {
+    question: "What does JSX stand for?",
+    options: ["JavaScript XML", "Java XML", "JSON XML", "None of the above"],
+    correctAnswer: "JavaScript XML"
+  },
+  {
+    question: "What is the purpose of ReactDOM.render() in React?",
+    options: ["It renders a React component to the DOM", "It renders a DOM element to a React component", "It updates the state of a React component", "None of the above"],
+    correctAnswer: "It renders a React component to the DOM"
+  },
+  {
+    question: "What is a functional component in React?",
+    options: ["A component that doesn't have state", "A component that doesn't render anything", "A component that is written as a class", "None of the above"],
+    correctAnswer: "A component that doesn't have state"
+  },
+  {
+    question: "What is the virtual DOM in React?",
+    options: ["A lightweight version of the real DOM", "A JavaScript object representing the DOM", "A concept used to improve rendering performance", "All of the above"],
+    correctAnswer: "All of the above"
+  },
+  {
+    question: "Which lifecycle method is invoked immediately after a component is inserted into the DOM?",
+    options: ["componentWillUnmount", "componentDidMount", "componentDidUpdate", "componentWillMount"],
+    correctAnswer: "componentDidMount"
+  },
+  {
+    question: "What is the purpose of setState() in React?",
+    options: ["To update the state of a component", "To render a component", "To define props", "To define state"],
+    correctAnswer: "To update the state of a component"
+  },
+  {
+    question: "What is the use of keys in React lists?",
+    options: ["To identify elements uniquely", "To define state", "To define props", "To render components"],
+    correctAnswer: "To identify elements uniquely"
+  },
+  {
+    question: "What is React Router?",
+    options: ["A library for routing in React applications", "A built-in feature of React", "A tool for styling React components", "None of the above"],
+    correctAnswer: "A library for routing in React applications"
+  },
+  {
+    question: "What is a controlled component in React?",
+    options: ["A component that is managed by React", "A component that handles its own state", "A component that accepts user input through props", "None of the above"],
+    correctAnswer: "A component that handles its own state"
+  },
+  {
+    question: "What does the useRef() hook do in React?",
+    options: ["Creates a mutable reference", "Creates a reference to a DOM element", "Creates a reference to a React component", "None of the above"],
+    correctAnswer: "Creates a reference to a DOM element"
+  }
+];
+
+
+let currentQuestion = 0;
+let score = 0;
+let timer = 150;
+
+const questionElement = document.getElementById('question');
+const optionsElement = document.getElementById('options');
+const timerElement = document.getElementById('timer');
+
+function displayQuestion() {
+  const currentQuestionData = quizData[currentQuestion];
+  questionElement.textContent = currentQuestionData.question;
+  optionsElement.innerHTML = '';
+  currentQuestionData.options.forEach((option, index) => {
+    const button = document.createElement('button');
+    button.textContent = option;
+    button.addEventListener('click', () => checkAnswer(option));
+    optionsElement.appendChild(button);
+  });
+}
+
+function checkAnswer(selectedOption) {
+  const currentQuestionData = quizData[currentQuestion];
+  if (selectedOption === currentQuestionData.correctAnswer) {
+    score++;
+  }
+  currentQuestion++;
+  if (currentQuestion < quizData.length) {
+    displayQuestion();
+  } else {
+    clearInterval(intervalId);
+    questionElement.textContent = `Quiz completed! Your score: ${score}/${quizData.length}`;
+    optionsElement.innerHTML = '';
+  }
+}
+
+function countdown() {
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
+  timerElement.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  if (timer === 0) {
+    clearInterval(intervalId);
+    questionElement.textContent = `Time's up! Quiz completed! Your score: ${score}/${quizData.length}`;
+    optionsElement.innerHTML = '';
+  }
+  timer--;
+}
+
+displayQuestion();
+const intervalId = setInterval(countdown, 1000);
+</script>
+</body>
+</html>
